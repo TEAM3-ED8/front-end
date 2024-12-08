@@ -46,95 +46,104 @@ export const DashboardPage = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10 md:gap-4 md:mb-0 md:ml-4">
         <StatCard
           icon={<MapPin className="h-4 w-4" />}
           title="Searches"
-          value={mockData.searches}
+          value={totalSearches}
+          subtitle={`Total address searches`}
         />
         <StatCard
-          icon={<Gift className="h-4 w-4" />}
+          icon={<MailOpen className="h-4 w-4" />}
           title="Letters"
-          value={mockData.letters}
+          value={totalLetters}
+          subtitle={`${readLetters} read, ${unreadLetters} unread`}
         />
+
         <StatCard
           icon={<Users className="h-4 w-4" />}
           title="Children"
-          value={mockData.children}
+          value={totalChildren}
         />
-        <StatCard
+        {/* <StatCard
           icon={<Cookie className="h-4 w-4" />}
           title="Calories Consumed"
-          value={mockData.calories.totalCalories}
-          subtitle={`${mockData.calories.consumedCookies} of ${mockData.calories.totalCookies} cookies`}
-        />
+          value={calories.totalCalories}
+          subtitle={`${calories.consumedCookies} of ${calories.totalCookies} cookies`}
+        /> */}
       </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
-        <ChartContainer
-          config={{
-            master: { label: "Master", color: "#D32F2F" },
-            junior: { label: "Junior", color: "#4d7c0f" },
-            trainee: { label: "Trainee", color: "#ffc658" },
-          }}
-        >
-          <ReindeerChart
-            data={[
-              {
-                name: "Master",
-                value: mockData.reindeerStats.master,
-                color: "#D32F2F",
-              },
-              {
-                name: "Junior",
-                value: mockData.reindeerStats.junior,
-                color: "#4d7c0f",
-              },
-              {
-                name: "Trainee",
-                value: mockData.reindeerStats.trainee,
-                color: "#ffc658",
-              },
-            ]}
-          />
-        </ChartContainer>
-        <ChartContainer
-          config={{
-            good: { label: "Good", color: "#D32F2F" },
-            naughty: { label: "Naughty", color: "#4d7c0f" },
-          }}
-        >
-          <ChildrenChart data={mockData.behaviorData} />
-        </ChartContainer>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
-        <div className="lg:col-span-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-0">
+        <div className="p-2 sm:p-4 md:py-6">
           <ChartContainer
             config={{
-              totalElves: { label: "Total Elves", color: "#D32F2F" },
-              availableElves: { label: "Available Elves", color: "#4d7c0f" },
+              master: { label: "Master", color: "#D32F2F" },
+              junior: { label: "Junior", color: "#4d7c0f" },
+              trainee: { label: "Trainee", color: "#ffc658" },
             }}
+            className="min-h-[300px] w-full mb-10 md:mb-0"
           >
-            <ElvesChart
+            <ReindeerChart
               data={[
-                { name: "Total Elves", value: mockData.elves, color: "#D32F2F" },
-                { name: "Available Elves", value: mockData.elvesAvailable, color: "#4d7c0f" },
+                { name: "Master", value: reindeerStats.master, color: "#D32F2F" },
+                { name: "Junior", value: reindeerStats.junior, color: "#4d7c0f" },
+                { name: "Trainee", value: reindeerStats.trainee, color: "#ffc658" },
               ]}
             />
           </ChartContainer>
         </div>
-        <ChartContainer
-          config={{
-            selected: { label: "Selected", color: "#4d7c0f" },
-            others: { label: "Others", color: "#CCCCCC" },
-          }}
-        >
-          <OrganizationChart
-            organizations={mockData.organizations}
-            selectedOrganization={mockData.selectedOrganization}
-          />
-        </ChartContainer>
+        <div className="p-2 sm:p-4 md:py-6 mb-16 md:mb-0">
+          <ChartContainer
+            config={{
+              Kind: { label: "Kind", color: behaviorColors.Kind },
+              Respectful: { label: "Respectful", color: behaviorColors.Respectful },
+              Lazy: { label: "Lazy", color: behaviorColors.Lazy },
+              Helpful: { label: "Helpful", color: behaviorColors.Helpful },
+              Curious: { label: "Curious", color: behaviorColors.Curious },
+            }}
+            className="mb-32 md:mb-0"
+          >
+            <PieChart
+              data={behaviorSummary ? Object.entries(behaviorSummary).map(([behavior, count]) => ({
+                name: behavior,
+                value: count,
+                color: behaviorColors[behavior],
+              })) : []}
+            />
+          </ChartContainer>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-20 md:gap-0">
+        <div className="lg:col-span-2">
+          <div className="p-2 sm:p-4 md:p-2 md:mt-20 2xl:mt-0">
+            <ChartContainer
+              config={{
+                availableElves: { label: "Available Elves", color: "#4d7c0f" },
+                unavailableElves: { label: "Unavailable Elves", color: "#D32F2F" },
+              }}
+              className="mb-28 md:mb-0"
+            >
+              <ElvesChart
+                data={[
+                  { name: "Available Elves", value: availableElves, color: "#4d7c0f" },
+                  { name: "Unavailable Elves", value: unavailableElves, color: "#D32F2F" },
+                ]}
+              />
+            </ChartContainer>
+          </div>
+        </div>
+        <div className="p-2 sm:p-4 md:p-2 lg:mt-20 2xl:mt-0">
+          <ChartContainer
+            config={{
+              selected: { label: "Selected", color: "#4d7c0f" },
+              others: { label: "Others", color: "#CCCCCC" },
+            }}
+          >
+            <OrganizationChart
+              organizations={organizationsData?.length || 0}
+              selectedOrganization={organizationsData?.[0]?.name || "N/A"}
+            />
+          </ChartContainer>
+        </div>
       </div>
     </div>
   );

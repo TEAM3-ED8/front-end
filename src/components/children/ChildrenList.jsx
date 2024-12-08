@@ -84,7 +84,7 @@ export const ChildrenList = () => {
         {/* List */}
         <section className='grid gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'>
           {filteredChildren.map((child) => (
-            <Card key={child.id} className='p-4 space-y-4 bg-gradient-to-r from-red-100 to-green-100'>
+            <Card key={child.id} className='p-4 space-y-4 bg-gradient-to-l from-green-50 to-rose-100'>
               <div className='flex items-center gap-3'>
                 <Baby className='rounded-full' width={40} height={40} />
                 <article className='flex-1 min-w-0'>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Cookie } from "lucide-react";
+import santaIcon from "@/assets/santa_sidebar_bottom.webp"
 import {
   ChristmasTree,
   Reindeer,
@@ -26,27 +27,27 @@ const items = [
     icon: ChristmasTree,
   },
   {
-    title: "Santa's Routes",
+    title: "Routes",
     url: "/santaroutes",
     icon: Route,
   },
   {
-    title: "Reindeer Setup",
+    title: "Reindeers",
     url: "/reindeer",
     icon: Reindeer,
   },
   {
-    title: "Santa's Calories",
+    title: "Calories",
     url: "/calories",
     icon: Cookie,
-      },
-    {
+  },
+  {
     title: "Children",
     url: "/children",
     icon: ChildrenIcon,
   },
   {
-    title: "Elve Management",
+    title: "Elves",
     url: "/elves",
     icon: ChristmasElf,
   },
@@ -79,20 +80,18 @@ export default function SideBar() {
   const SidebarContent = () => (
     <>
       <div className="relative z-10 flex flex-col items-center pt-2 flex-grow">
-        <div className="flex justify-around items-center w-full mb-6 px-4">
+        <div className="flex justify-around items-center w-full px-4">
           <img
             src={logo}
             alt="Santa's Workshop Logo"
-            className={`transition-all duration-300 ease-in-out ${
-              isCollapsed && !isMobile ? "hidden" : "w-64 h-30 mt-2"
-            }`}
+            className={`transition-all duration-300 ease-in-out ${isCollapsed && !isMobile ? "hidden" : "w-64 h-30 mt-2"
+              }`}
           />
           {!isMobile && (
             <button
               onClick={toggleSidebar}
-              className={`transition-all duration-300 ease-in-out text-white hover:scale-110 hover:text-green-600 font-bold rounded-full ${
-                isCollapsed ? "absolute top-6 mr-2" : "absolute top-3 right-6"
-              }`}
+              className={`transition-all duration-300 ease-in-out text-white hover:scale-110 hover:text-green-600 font-bold rounded-full ${isCollapsed ? "absolute top-6 mr-2" : "absolute top-3 right-6"
+                }`}
               aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
             >
               <AlignCenter className="h-8 w-8" />
@@ -100,16 +99,15 @@ export default function SideBar() {
           )}
         </div>
         <nav className="w-full flex-grow">
-          <ul className={`space-y-2 px-2 ${isCollapsed ? "py-6 mt-8" : ""}`}>
+          <ul className={`flex flex-col gap-2 px-2 ${isCollapsed ? "py-10 mt-8" : ""}`}>
             {items.map((item) => (
               <li key={item.title} className="group">
                 <Link
                   to={item.url}
-                  className={`flex items-center px-4 py-3 w-full hover:bg-green-600 hover:scale-105 text-white font-bold transition-all duration-300 rounded-lg overflow-hidden ${
-                    location.pathname === item.url
+                  className={`flex items-center px-4 py-3 w-full hover:bg-green-600 hover:scale-105 text-white font-bold transition-all duration-300 rounded-lg overflow-hidden ${location.pathname === item.url
                       ? "bg-green-700 text-white"
                       : ""
-                  }`}
+                    }`}
                 >
                   <item.icon
                     className="h-6 w-6 flex-shrink-0"
@@ -124,25 +122,23 @@ export default function SideBar() {
           </ul>
         </nav>
       </div>
-      <div className="relative z-10 p-4 bg-green-700 rounded-t-full shadow-xl mt-auto">
+      <div className="relative z-10 bg-green-700 rounded-t-full shadow-xl mt-5">
         <div
-          className={`flex flex-col items-center gap-4 mb-4 transition-all duration-300 ease-in-out ${
-            isCollapsed ? "mb-0" : ""
-          }`}
+          className={`flex flex-col items-center gap-4 my-4 transition-all duration-300 ease-in-out ${isCollapsed ? "mb-0" : ""
+            }`}
         >
           <Avatar
-            className={`border-4 border-red-200 ${
-              isCollapsed ? "w-10 h-10" : "w-16 h-16"
-            }`}
+            className={`border-4 border-red-200 ${isCollapsed ? "size-10" : "size-16"
+              }`}
           >
             <AvatarImage
-              src="https://www.svgrepo.com/show/222575/santa-claus-christmas.svg"
+              src={santaIcon}
               alt="Santa Claus"
             />
             <AvatarFallback>SC</AvatarFallback>
           </Avatar>
           {(!isCollapsed || isMobile) && (
-            <div className={`text-center ${isCollapsed ? "hidden" : ""}`}>
+            <div className={`text-center px-4 ${isCollapsed ? "hidden" : ""}`}>
               <p className="font-bold text-white text-lg">Santa Claus</p>
               <p className="text-sm text-white">santa@northpole.com</p>
             </div>
@@ -150,9 +146,8 @@ export default function SideBar() {
         </div>
         <Button
           variant="ghost"
-          className={`w-full ${
-            isCollapsed ? "p-2 aspect-square" : ""
-          } text-white hover:bg-red-700 hover:text-white transition-all duration-300 font-bold flex items-center justify-center`}
+          className={`w-full ${isCollapsed ? "p-2 aspect-square" : ""
+            } text-white hover:bg-red-700 hover:text-white transition-all duration-300 font-bold flex items-center justify-center`}
         >
           <ChristmasLogout
             className={`h-5 w-10 font-bold ${isCollapsed ? "h-6 w-6" : ""}`}
@@ -172,9 +167,9 @@ export default function SideBar() {
           aria-label={mobileOpen ? "Close sidebar" : "Open sidebar"}
         >
           {mobileOpen ? (
-            <X className="h-6 w-6" />
+            <X className="size-6" />
           ) : (
-            <AlignCenter className="h-6 w-6" />
+            <AlignCenter className="size-6" />
           )}
         </button>
       )}
@@ -192,16 +187,14 @@ export default function SideBar() {
           bg-gradient-to-b from-red-900 via-red-600 to-black 
           ${isCollapsed && !isMobile ? "w-20" : "w-64"} 
           transition-all duration-300 ease-in-out
-          ${
-            isMobile ? (mobileOpen ? "translate-x-0" : "-translate-x-full") : ""
+          ${isMobile ? (mobileOpen ? "translate-x-0" : "-translate-x-full") : ""
           }
           z-50
         `}
       >
         <div
-          className={`flex flex-col h-full ${
-            isMobile ? "items-center justify-center" : ""
-          }`}
+          className={`flex flex-col h-full ${isMobile ? "items-center justify-center" : ""
+            }`}
         >
           <SidebarContent />
         </div>

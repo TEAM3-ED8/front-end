@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import PropTypes from 'prop-types';
+import elf_1 from '@/assets/gnomo.webp'
+import elf_2 from '@/assets/gnomo_2.webp'
+import elf_3 from '@/assets/gnomo_3.webp'
 
   const avatars = [
-    "https://www.svgrepo.com/show/396366/elf-dark-skin-tone.svg",
-    "https://www.svgrepo.com/show/396367/elf-light-skin-tone.svg",
-    "https://www.svgrepo.com/show/396368/elf-medium-dark-skin-tone.svg",
-    "https://www.svgrepo.com/show/405285/elf-medium-light-skin-tone.svg",
+    elf_1,
+    elf_2,
+    elf_3,
   ];
 
   export default function ElvesAvatar({ id, initials }) {

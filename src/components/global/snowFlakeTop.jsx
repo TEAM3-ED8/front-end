@@ -15,7 +15,7 @@ const SnowFlakeTop = (props) => (
       <defs>
         <linearGradient id="gradient" x1="21%" y1="90%" x2="79%" y2="10%">
           <stop offset="5%" stopColor="#f8f8f8" />
-          <stop offset="95%" stopColor="#abb8c3" />
+          <stop offset="95%" stopColor="#d5f2e3" />
         </linearGradient>
       </defs>
       
