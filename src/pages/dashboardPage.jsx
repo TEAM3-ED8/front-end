@@ -39,13 +39,11 @@ export const DashboardPage = () => {
       <h1 className="text-4xl text-center font-bold text-red-600 mb-8">
         <UnderlineTitle text="Santa's Dashboard" />
       </h1>
-
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-8">
         <div className="col-span-1 lg:col-start-2 lg:col-span-2 flex justify-center items-center">
           <Countdown />
         </div>
       </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10 md:gap-4 md:mb-0 md:ml-4">
         <StatCard
           icon={<MapPin className="h-4 w-4" />}
