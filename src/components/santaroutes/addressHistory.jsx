@@ -77,30 +77,30 @@ export default function AddressHistory({ locations, onRestore, onDelete, onDelet
   };
 
   return (
-    <Card className="h-100vh md:h-full bg-gradient-to-r from-red-50 to-green-50">
+    <Card className="w-full bg-gradient-to-r from-red-50 to-green-50">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold flex items-center justify-between text-green-700">
+        <CardTitle className="text-xl font-semibold flex flex-col sm:flex-row items-center justify-between text-green-700 gap-4">
           <div className="flex items-center">
             <HistoryIcon className="mr-2" />
             Santa&apos;s previous stops
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center gap-2">
             <Button
-              size="icon"
+              size="sm"
               onClick={handleShowAll}
-              className="mr-2 w-32 bg-transparent hover:bg-green-100 text-green-700 shadow-zinc-500"
+              className="bg-transparent hover:bg-green-100 text-green-700 shadow-zinc-500"
             >
               {showingAll ? "Hide all" : "Show all"}
             </Button>
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button
-                  size="icon"
+                  size="sm"
                   onClick={() => setLocationToDelete(null)}
-                  className="w-32 bg-transparent hover:bg-red-100 text-red-600 shadow-zinc-500"
+                  className="bg-transparent hover:bg-red-100 text-red-600 shadow-zinc-500"
                 >
                   Delete all
-                  <TrashIcon className="h-4 w-4 text-red-600" />
+                  <TrashIcon className="h-4 w-4 ml-2 text-red-600" />
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
@@ -128,7 +128,7 @@ export default function AddressHistory({ locations, onRestore, onDelete, onDelet
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-100vh md:h-[calc(90vh-16rem)]">
+        <ScrollArea className="h-[50vh] sm:h-[calc(90vh-16rem)]">
           {sortedLocations.length === 0 ? (
             <p className="text-center text-zinc-700">No previous searches...</p>
           ) : (
@@ -148,7 +148,7 @@ export default function AddressHistory({ locations, onRestore, onDelete, onDelet
                     ))}
                   </span>
                 </div>
-                <div className="flex items-start md:items-center flex-shrink-0">
+                <div className="flex items-center md:items-center flex-shrink-0 mt-2 sm:mt-0">
                   <Button
                     size="icon"
                     onClick={() => handleRestore(location)}

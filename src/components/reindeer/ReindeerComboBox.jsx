@@ -23,7 +23,7 @@ export default function ReindeerComboBox({ data, value, onChange = () => {} }) {
   const [open, setOpen] = React.useState(false);
 
   const handleSelect = (selectedValue) => {
-    onChange(selectedValue === value ? "" : selectedValue);
+    onChange(selectedValue === value ? null : selectedValue);
     setOpen(false);
   };
 

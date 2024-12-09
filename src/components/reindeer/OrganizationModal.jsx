@@ -2,11 +2,11 @@ import * as React from "react";
 
 import { useForm } from "react-hook-form";
 import PropTypes from "prop-types";
-import { toast as customToast } from "react-toastify";
 import ReindeerComboBox from "@/components/reindeer/ReindeerComboBox";
+import CustomCheckbox from "@/components/global/customCheckbox";
+import santahat from "@/assets/santahat.webp";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -25,8 +25,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { BadgeInfo, Check } from "lucide-react";
-import santahat from "@/assets/santahat.webp";
-import { ChristmasSanta } from "@/components/global/iconsChristmas";
 
 export default function OrganizationModal({
   isOpen,
@@ -35,26 +33,12 @@ export default function OrganizationModal({
   data: { organizationData, reindeersData },
   generateOrganizationToView = () => {},
 }) {
-  const [addBestReindeer, setAddBestReindeer] = React.useState(false);
-  const [bestReindeers, setBestReindeers] = React.useState(null);
-  const [initialPositions, setInitialPositions] = React.useState([]);
-  const [reindeersSelected, setReindeersSelected] = React.useState(
-    Array.from({ length: 6 }, (_, index) => ({
-      position: index + 1,
-      reindeer: "",
-    }))
-  );
-
   const defaultValues = organizationData || {
     name: "",
-    positions: [
-      { position: 1, reindeer: "" },
-      { position: 2, reindeer: "" },
-      { position: 3, reindeer: "" },
-      { position: 4, reindeer: "" },
-      { position: 5, reindeer: "" },
-      { position: 6, reindeer: "" },
-    ],
+    positions: Array.from({ length: 6 }, (_, i) => ({
+      position: i + 1,
+      reindeerId: null,
+    })),
     isSelected: false,
     isAvailable: true,
   };
@@ -72,57 +56,65 @@ export default function OrganizationModal({
 
   const positions = watch("positions");
 
+  const reindeersList = reindeersData.map((reindeer) => ({
+    id: reindeer.id,
+    name: reindeer.name,
+  }));
+
+  const [selectedReindeers, setSelectedReindeers] = React.useState(
+    positions.map((position) => position.reindeerId)
+  );
+
   React.useEffect(() => {
     if (organizationData) {
       reset(organizationData);
-      setInitialPositions(organizationData.positions);
+      setSelectedReindeers(
+        organizationData.positions.map((position) => position.reindeerId)
+      );
     } else {
       reset(defaultValues);
-      setInitialPositions(defaultValues.positions);
+      setSelectedReindeers(
+        defaultValues.positions.map((position) => position.reindeerId)
+      );
     }
   }, [organizationData, reset]);
 
   React.useEffect(() => {
-    const sortedReindeers = [...reindeersData].sort((a, b) => {
-      const aScore =
-        a.skills.find((s) => s.skill === "Night vision").value +
-        a.skills.find((s) => s.skill === "Climate adaptability").value;
-      const bScore =
-        b.skills.find((s) => s.skill === "Night vision").value +
-        b.skills.find((s) => s.skill === "Climate adaptability").value;
-      return bScore - aScore;
-    });
-    setBestReindeers(sortedReindeers.slice(0, 6));
-  }, [reindeersData]);
+    if (isClose) {
+      setSelectedReindeers(
+        defaultValues.positions.map((position) => position.reindeerId)
+      );
+      reset(defaultValues);
+    }
+  }, [isClose, reset]);
 
-  React.useEffect(() => {
-    if (addBestReindeer) {
-      bestReindeers.forEach((reindeer, index) => {
-        if (index < 6) {
-          setValue(`positions.${index}.reindeer`, reindeer.id);
+  const handleReindeerChange = (index, selectedId) => {
+    setSelectedReindeers((prev) => {
+      const updated = [...prev];
+      updated[index] = selectedId;
+
+      updated.forEach((id, i) => {
+        if (id === selectedId && i !== index) {
+          updated[i] = null;
         }
       });
-    } else {
-      initialPositions.forEach((position, index) => {
-        setValue(`positions.${index}.reindeer`, position.reindeer);
-      });
-    }
-  }, [addBestReindeer, bestReindeers, initialPositions, setValue]);
+
+      return updated;
+    });
+    setValue(`positions.${index}.reindeerId`, selectedId);
+  };
+
+  const isSubmitDisabled = selectedReindeers.some(
+    (reindeerId) => reindeerId === null
+  );
 
   const onSubmitForm = handleSubmit((data) => {
     const allPositionsHaveReindeer = data.positions.every(
-      (position) => position.reindeer !== ""
+      (position) => position.reindeerId !== null
     );
 
     const formattedData = {
-      id: organizationData
-        ? organizationData.id
-        : Math.round(Math.random() * 100).toString(),
       ...data,
-      positions: data.positions.map((p, index) => ({
-        position: index + 1,
-        reindeerId: p.reindeer // Change 'reindeer' to 'reindeerId'
-      })),
       isSelected: organizationData
         ? allPositionsHaveReindeer
           ? organizationData.isSelected
@@ -133,50 +125,9 @@ export default function OrganizationModal({
 
     onSubmit(formattedData);
     generateOrganizationToView(allPositionsHaveReindeer ? formattedData : null);
-    setReindeersSelected(
-      Array.from({ length: 6 }, (_, index) => ({
-        position: index + 1,
-        reindeer: "",
-      }))
-    );
     isClose();
     reset();
   });
-
-  const listReindeers = reindeersData.map((reindeer) => ({
-    id: reindeer.id,
-    name: reindeer.name,
-    position: reindeer.position,
-  }));
-
-  React.useEffect(() => {
-    const filteredReindeerIDs = reindeersSelected
-      .map(({ reindeer }) => reindeer)
-      .filter((reindeerID) => reindeerID !== "");
-
-    const isDuplicated =
-      filteredReindeerIDs.length !== new Set(filteredReindeerIDs).size;
-
-    isDuplicated &&
-      customToast("A reindeer cannot be in more than one position", {
-        className:
-          "bg-white bg-opacity-55 backdrop-filter backdrop-blur-lg border border-red-200 text-red-700 rounded-lg shadow-lg",
-        bodyClassName: "text-sm font-medium text-black",
-        progressClassName: "bg-red-500",
-        icon: <ChristmasSanta className="w-8 h-8" />,
-      });
-  }, [reindeersSelected]);
-
-  // Function to check if the button should be disabled
-  const isButtonDisabled = () => {
-    // // Extracts the reindeer IDs and filters out empty strings
-    const filteredReindeerIDs = reindeersSelected
-      .map(({ reindeer }) => reindeer)
-      .filter((reindeerID) => reindeerID !== "");
-
-    // Returns true if there are duplicates
-    return filteredReindeerIDs.length !== new Set(filteredReindeerIDs).size;
-  };
 
   return (
     <>
@@ -229,12 +180,7 @@ export default function OrganizationModal({
               </div>
             </div>
             <div className="flex items-center space-x-2 mt-4">
-              <Checkbox
-                id="addBestReindeer"
-                checked={addBestReindeer}
-                onCheckedChange={setAddBestReindeer}
-                className="border-red-400"
-              />
+              <CustomCheckbox id="addBestReindeer" className="border-red-400" />
               <Label
                 htmlFor="addBestReindeer"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-green-700"
@@ -262,21 +208,18 @@ export default function OrganizationModal({
                       one position
                     </p>
                     <div className="grid grid-cols-2 gap-5 place-items-center md:grid-cols-3">
-                      {positions.map((position, index) => (
+                      {positions.map((_, index) => (
                         <ReindeerComboBox
-                          key={position.position}
-                          data={listReindeers}
-                          value={position.reindeer}
-                          onChange={(value) => {
-                            setValue(`positions.${index}.reindeer`, value);
-                            setReindeersSelected((positions) =>
-                              positions.map((position) =>
-                                position.position === index + 1
-                                  ? { ...position, reindeer: value.toString() }
-                                  : position
-                              )
-                            );
-                          }}
+                          key={index}
+                          data={reindeersList.filter(
+                            (reindeer) =>
+                              !selectedReindeers.includes(reindeer.id) ||
+                              selectedReindeers[index] === reindeer.id
+                          )}
+                          value={selectedReindeers[index]}
+                          onChange={(value) =>
+                            handleReindeerChange(index, value)
+                          }
                         />
                       ))}
                     </div>
@@ -287,7 +230,7 @@ export default function OrganizationModal({
                     <Button
                       type="submit"
                       className=" bg-green-600 hover:bg-green-700 w-full"
-                      disabled={isButtonDisabled()}
+                      disabled={isSubmitDisabled}
                     >
                       <Check /> Save
                     </Button>
@@ -306,16 +249,24 @@ OrganizationModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   isClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  initialData: PropTypes.shape({
-    id: PropTypes.string, // This is a number, I use string because i can't query with ID number on json server
-    name: PropTypes.string,
-    positions: PropTypes.arrayOf(
+  data: PropTypes.shape({
+    organizationData: PropTypes.shape({
+      name: PropTypes.string,
+      positions: PropTypes.arrayOf(
+        PropTypes.shape({
+          position: PropTypes.number,
+          reindeerId: PropTypes.number,
+        })
+      ),
+      isSelected: PropTypes.bool,
+      isAvailable: PropTypes.bool,
+    }),
+    reindeersData: PropTypes.arrayOf(
       PropTypes.shape({
-        position: PropTypes.number,
-        reindeer: PropTypes.string,
+        id: PropTypes.number,
+        name: PropTypes.string,
       })
-    ),
-    isAvailable: PropTypes.bool,
-    isSelected: PropTypes.bool,
+    ).isRequired,
   }),
+  generateOrganizationToView: PropTypes.func,
 };

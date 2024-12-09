@@ -29,8 +29,8 @@ export const Letters = () => {
     if (!letter.isRead) {
       try {
         await updateLetterMutation.mutateAsync({ id: letter.id, isRead: true });
-      } catch {
-        // Error intentionally ignored
+      } catch (error) {
+        console.error("Error updating letter status:", error);
       }
     }
   };
@@ -38,10 +38,13 @@ export const Letters = () => {
   const toggleReadStatus = async (letter) => {
     try {
       await updateLetterMutation.mutateAsync({ id: letter.id, isRead: !letter.isRead });
-    } catch{
-      // Error intentionally ignored
-      
+    } catch (error) {
+      console.error("Error toggling read status:", error);
     }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   if (isLoading) return <LoadingScreen />;
@@ -61,7 +64,7 @@ export const Letters = () => {
       />
       <LetterModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={closeModal}
         letter={selectedLetter}
       />
     </div>

@@ -198,30 +198,29 @@ export const RoutesPage = () => {
   }
 
   return (
-    <div className="flex flex-col h-full md:h-screen md:overflow-y-hidden">
-      <div className="px-4 w-full">
+    <div className="flex flex-col min-h-screen">
+      <div className="px-4 w-full flex-grow">
         <h1 className="text-4xl font-bold text-red-700 mb-10 text-center">
           <UnderlineTitle text="Santa's Routes" />
         </h1>
-        <div className="flex flex-col space-y-4">
-          <div className="flex flex-col lg:flex-row w-full gap-4">
-            <div className="w-full lg:w-3/5">
-              <MapRoute
-                currentRoute={currentRoute?.end}
-                routeCoordinates={currentRoute?.coordinates}
-                northPole={NORTH_POLE}
-                onSearch={handleSearch}
-                onSave={handleSave}
-              />
-            </div>
-            <div className="w-full lg:w-2/5">
-              <AddressHistory
-                locations={searchHistory}
-                onRestore={handleRestore}
-                onDelete={handleDelete}
-                onDeleteAll={handleDeleteAll}
-              />
-            </div>
+        <div className="flex flex-col lg:flex-row gap-4">
+          <div className="w-full lg:w-3/5">
+            <MapRoute
+              className="h-[400px] lg:h-[600px]"
+              currentRoute={currentRoute?.end}
+              routeCoordinates={currentRoute?.coordinates}
+              northPole={NORTH_POLE}
+              onSearch={handleSearch}
+              onSave={handleSave}
+            />
+          </div>
+          <div className="w-full lg:w-2/5">
+            <AddressHistory
+              locations={searchHistory}
+              onRestore={handleRestore}
+              onDelete={handleDelete}
+              onDeleteAll={handleDeleteAll}
+            />
           </div>
         </div>
       </div>

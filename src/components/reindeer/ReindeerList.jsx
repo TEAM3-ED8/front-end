@@ -5,7 +5,6 @@ import {
   useDeleteReindeer,
   useDeleteCheckedReindeer,
 } from "@/services/reindeer/reindeerapi";
-import { useUpdateReindeerOrganizations } from "@/services/reindeer/organizationapi";
 import { useToast } from "@/hooks/useToast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -43,14 +42,13 @@ export default function ReindeerList({
   // Mutations for deleting reindeer data.
   const deleteReindeerMutation = useDeleteReindeer();
   const deleteCheckedReindeer = useDeleteCheckedReindeer();
-  // Mutations for managing organization data.
-  const updateOrganizationsMutation = useUpdateReindeerOrganizations();
 
   // Function to handle deleting a reindeer
   const handleDeleteReindeer = async (reindeerDeleted) => {
     try {
       await deleteReindeerMutation.mutateAsync(reindeerDeleted);
       toast.success(`${reindeerDeleted.name} has been deleted.`);
+      showReindeerImpactToast(reindeerDeleted);
     } catch {
       toast.error(`Failed to delete ${reindeerDeleted.name}.`);
     }
@@ -64,36 +62,43 @@ export default function ReindeerList({
     try {
       await deleteCheckedReindeer.mutateAsync(reindeersToDelete);
       toast.success("Reindeers deleted successfully");
-      setChecketReindeer([]);
+      showReindeerImpactToast(reindeersToDelete);
     } catch {
       toast.error("Failed to delete selected reindeers");
     }
   };
 
-  // Function to handle deleting a reindeers in some organization.
-  const hadleUpdateOrganizations = (reindeer) => {
-    // Find organizations with this reindeer
-    const organizationsWithReindeer = organizationsData.filter(
-      (organization) => {
-        // Check if the organization contains the reindeer
-        const containsReindeer = organization.positions.some(
-          (position) => position.reindeer === reindeer.id
-        );
+  const showReindeerImpactToast = (reindeers) => {
+    const reindeerList = Array.isArray(reindeers) ? reindeers : [reindeers];
 
-        // If it contains the reindeer, set isAvailable to false and isSelected to false
-        if (containsReindeer) {
-          organization.isAvailable = false;
-          organization.isSelected = false;
+    const impactedOrganizations = new Set();
+
+    reindeerList.forEach((reindeer) => {
+      // Find organizations that include the given reindeer
+      const organizationsWithReindeer = organizationsData.filter(
+        (organization) => {
+          // Check if the organization contains the reindeer
+          const containsReindeer = organization.positions.some(
+            (position) => position.reindeerId === reindeer.id
+          );
+
+          // Return only the organizations that contain the reindeer
+          return containsReindeer;
         }
+      );
 
-        // Return only the organizations that contain the reindeer
-        return containsReindeer;
-      }
-    );
+      organizationsWithReindeer.forEach((organization) => {
+        impactedOrganizations.add(organization.id);
+      });
+    });
 
-    // Update the "isAvailable" property in organizations associated with the reindeer.
-    if (organizationsWithReindeer.length > 0) {
-      updateOrganizationsMutation.mutateAsync(organizationsWithReindeer);
+    // Show a toast if there are impacted organizations
+    if (impactedOrganizations.size > 0) {
+      toast.info(
+        `With the removal, ${impactedOrganizations.size} organization${
+          impactedOrganizations.size > 1 && "s"
+        } were impacted and updated.`
+      );
       generateOrganizationToView(null);
     }
   };
@@ -232,10 +237,7 @@ export default function ReindeerList({
                               <AlertDialogCancel>Cancel</AlertDialogCancel>
                               <AlertDialogAction
                                 className="bg-red-600 hover:bg-red-700"
-                                onClick={() => {
-                                  hadleUpdateOrganizations(reindeer);
-                                  handleDeleteReindeer(reindeer);
-                                }}
+                                onClick={() => handleDeleteReindeer(reindeer)}
                               >
                                 Continue
                               </AlertDialogAction>

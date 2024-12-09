@@ -1,12 +1,15 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Legend } from 'recharts';
 import { ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import PropTypes from "prop-types";
+
+const behaviors = ["Kind", "Respectful", "Lazy", "Helpful", "Curious"];
+const colors = ["#4299E1", "#48BB78", "#ED8936", "#ECC94B", "#ED64A6"];
 
 export const ChildrenChart = ({ data }) => (
   <Card className="col-span-1">
     <CardHeader>
-      <CardTitle>Children&apos;s Behavior</CardTitle>
+      <CardTitle>Children&apos;s Behavior Over Time</CardTitle>
     </CardHeader>
     <CardContent>
       <ResponsiveContainer width="100%" height={300}>
@@ -15,8 +18,16 @@ export const ChildrenChart = ({ data }) => (
           <XAxis dataKey="month" />
           <YAxis />
           <ChartTooltip content={<ChartTooltipContent />} />
-          <Line type="monotone" dataKey="good" stroke="var(--color-good)" />
-          <Line type="monotone" dataKey="naughty" stroke="var(--color-naughty)" />
+          <Legend />
+          {behaviors.map((behavior, index) => (
+            <Line 
+              key={behavior}
+              type="monotone" 
+              dataKey={behavior} 
+              stroke={colors[index]} 
+              activeDot={{ r: 8 }}
+            />
+          ))}
         </LineChart>
       </ResponsiveContainer>
     </CardContent>
@@ -27,9 +38,11 @@ ChildrenChart.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       month: PropTypes.string.isRequired,
-      good: PropTypes.number.isRequired,
-      naughty: PropTypes.number.isRequired,
+      Kind: PropTypes.number.isRequired,
+      Respectful: PropTypes.number.isRequired,
+      Lazy: PropTypes.number.isRequired,
+      Helpful: PropTypes.number.isRequired,
+      Curious: PropTypes.number.isRequired,
     })
   ).isRequired,
 };
-

@@ -1,6 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import PropTypes from 'prop-types';
@@ -21,13 +20,13 @@ export const OrganizationChart = ({ organizations, selectedOrganization }) => {
         <p className="text-sm text-gray-500 mb-4">Total Organizations</p>
         <Badge variant="secondary" className="mb-2">Selected: {selectedOrganization}</Badge>
         <ResponsiveContainer width="100%" height={200}>
-          <PieChart>
+          <PieChart margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
             <Pie
               data={data}
               cx="50%"
               cy="50%"
-              innerRadius={60}
-              outerRadius={80}
+              innerRadius={40}
+              outerRadius={60}
               fill="#8884d8"
               paddingAngle={5}
               dataKey="value"
@@ -39,7 +38,6 @@ export const OrganizationChart = ({ organizations, selectedOrganization }) => {
             <ChartTooltip content={<ChartTooltipContent />} />
           </PieChart>
         </ResponsiveContainer>
-        <Button className="w-full mt-4 bg-green-700">Manage Organizations</Button>
       </CardContent>
     </Card>
   );

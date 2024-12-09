@@ -10,10 +10,25 @@ export const ElvesChart = ({ data }) => (
     </CardHeader>
     <CardContent>
       <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={data}>
+        <BarChart 
+          data={data} 
+          margin={{ 
+            top: 20, 
+            right: 10, 
+            left: 0, 
+            bottom: 5 
+          }}
+        >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
+          <XAxis 
+            dataKey="name" 
+            tick={{ fontSize: 12 }}
+            interval={0}
+            angle={0}
+            textAnchor="center"
+            height={40}
+          />
+          <YAxis tick={{ fontSize: 12 }} />
           <ChartTooltip content={<ChartTooltipContent />} />
           <Bar dataKey="value">
             {data.map((entry, index) => (

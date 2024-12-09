@@ -20,10 +20,10 @@ export const useAddReindeer = () => {
     mutationFn: (newReindeer) => {
       const formattedData = {
         ...newReindeer,
-        skills: newReindeer.skills.map(s => ({
+        skills: newReindeer.skills.map((s) => ({
           ...s,
-          value: Number(s.value)
-        }))
+          value: Number(s.value),
+        })),
       };
       return axios.post(`${API_URL}api/reindeer`, formattedData);
     },
@@ -41,12 +41,15 @@ export const useUpdateReindeer = () => {
       const formattedData = {
         ...reindeerData,
         id: Number(id),
-        skills: skills.map(s => ({
+        skills: skills.map((s) => ({
           skill: s.skill,
-          value: Number(s.value)
-        }))
+          value: Number(s.value),
+        })),
       };
-      return axios.put(`${API_URL}api/reindeer/${formattedData.id}`, formattedData);
+      return axios.put(
+        `${API_URL}api/reindeer/${formattedData.id}`,
+        formattedData
+      );
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reindeers"] });
@@ -63,12 +66,15 @@ export const useUpdateCheckedReindeers = () => {
           const formattedData = {
             ...reindeer,
             id: Number(reindeer.id),
-            skills: reindeer.skills.map(s => ({
+            skills: reindeer.skills.map((s) => ({
               ...s,
-              value: Number(s.value)
-            }))
+              value: Number(s.value),
+            })),
           };
-          return axios.put(`${API_URL}api/reindeer/${formattedData.id}`, formattedData);
+          return axios.put(
+            `${API_URL}api/reindeer/${formattedData.id}`,
+            formattedData
+          );
         })
       ),
     onSuccess: () => {
@@ -84,6 +90,7 @@ export const useDeleteReindeer = () => {
       axios.delete(`${API_URL}api/reindeer/${Number(deletedReindeer.id)}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reindeers"] });
+      queryClient.refetchQueries(["organizations"]);
     },
   });
 };
@@ -99,6 +106,7 @@ export const useDeleteCheckedReindeer = () => {
       ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reindeers"] });
+      queryClient.refetchQueries(["organizations"]);
     },
   });
 };

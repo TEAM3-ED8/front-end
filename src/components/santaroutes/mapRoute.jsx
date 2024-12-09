@@ -6,6 +6,7 @@ import {
   Popup,
   Polyline,
   useMap,
+  ZoomControl
 } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -79,7 +80,9 @@ export default function MapRoute({
         style={{ height: "75vh", width: "100%", borderRadius: "10px" }}
         ref={mapRef}
         className="rounded-3xl"
+        zoomControl={false}
       >
+        <ZoomControl position="bottomright" className="block sm:hidden" />
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

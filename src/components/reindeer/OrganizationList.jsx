@@ -6,9 +6,9 @@ import {
   useDeleteCheckedReindeerOrganizations,
 } from "@/services/reindeer/organizationapi";
 import SelectAll from "@/components/global/selectAll";
+import CustomCheckbox from "@/components/global/customCheckbox";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import CustomCheckbox from "@/components/global/customCheckbox";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -37,6 +37,7 @@ export default function OrganizationList({
   const toast = useToast();
   const [checkedOrganization, setCheckedOrganization] = React.useState([]);
   const [filter, setFilter] = React.useState("");
+  // Mutations for managing organization data.
   const deleteReindeersOrganizationMutation = useDeleteReindeersOrganization();
   const deleteCheckedReindeerOrganization =
     useDeleteCheckedReindeerOrganizations();
