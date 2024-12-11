@@ -17,7 +17,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { CardDescription } from "@/components/ui/card";
-import { Check } from 'lucide-react';
+import { Check } from "lucide-react";
 import { SantaSledge } from "@/components/global/iconsChristmas";
 import { fetchWeather } from "@/services/weather/weather";
 import { useQuery } from "@tanstack/react-query";
@@ -26,7 +26,6 @@ export default function OrganizationModal({
   isClose,
   onSubmit,
   data: { organizationData, reindeersData },
-  generateOrganizationToView = () => {},
 }) {
   const defaultValues = organizationData || {
     name: "",
@@ -100,20 +99,132 @@ export default function OrganizationModal({
 
   const getBestReindeerForWeather = (weatherDescription, reindeers) => {
     const weatherConditions = {
-      "partly cloudy": ["Dasher", "Dancer", "Comet", "Cupid", "Donner", "Blitzen", "Prancer", "Vixen", "Rudolph"],
-      "clear": ["Comet", "Cupid", "Dasher", "Dancer", "Donner", "Blitzen", "Prancer", "Vixen", "Rudolph"],
-      "sunny": ["Donner", "Blitzen", "Comet", "Cupid", "Dasher", "Dancer", "Prancer", "Vixen", "Rudolph"],
-      "moderate rain": ["Prancer", "Vixen", "Dasher", "Dancer", "Comet", "Cupid", "Donner", "Blitzen", "Rudolph"],
-      "patchy rain nearby": ["Rudolph", "Prancer", "Vixen", "Dasher", "Dancer", "Comet", "Cupid", "Donner", "Blitzen"],
-      "haze": ["Rudolph", "Dasher", "Dancer", "Comet", "Cupid", "Donner", "Blitzen", "Prancer", "Vixen"],
-      "light rain shower": ["Prancer", "Vixen", "Rudolph", "Dasher", "Dancer", "Comet", "Cupid", "Donner", "Blitzen"],
-      "light rain": ["Prancer", "Vixen", "Rudolph", "Dasher", "Dancer", "Comet", "Cupid", "Donner", "Blitzen"],
-      "overcast": ["Rudolph", "Dasher", "Dancer", "Comet", "Cupid", "Donner", "Blitzen", "Prancer", "Vixen"],
-      "mist": ["Rudolph", "Dasher", "Dancer", "Comet", "Cupid", "Donner", "Blitzen", "Prancer", "Vixen"],
+      "partly cloudy": [
+        "Dasher",
+        "Dancer",
+        "Comet",
+        "Cupid",
+        "Donner",
+        "Blitzen",
+        "Prancer",
+        "Vixen",
+        "Rudolph",
+      ],
+      clear: [
+        "Comet",
+        "Cupid",
+        "Dasher",
+        "Dancer",
+        "Donner",
+        "Blitzen",
+        "Prancer",
+        "Vixen",
+        "Rudolph",
+      ],
+      sunny: [
+        "Donner",
+        "Blitzen",
+        "Comet",
+        "Cupid",
+        "Dasher",
+        "Dancer",
+        "Prancer",
+        "Vixen",
+        "Rudolph",
+      ],
+      "moderate rain": [
+        "Prancer",
+        "Vixen",
+        "Dasher",
+        "Dancer",
+        "Comet",
+        "Cupid",
+        "Donner",
+        "Blitzen",
+        "Rudolph",
+      ],
+      "patchy rain nearby": [
+        "Rudolph",
+        "Prancer",
+        "Vixen",
+        "Dasher",
+        "Dancer",
+        "Comet",
+        "Cupid",
+        "Donner",
+        "Blitzen",
+      ],
+      haze: [
+        "Rudolph",
+        "Dasher",
+        "Dancer",
+        "Comet",
+        "Cupid",
+        "Donner",
+        "Blitzen",
+        "Prancer",
+        "Vixen",
+      ],
+      "light rain shower": [
+        "Prancer",
+        "Vixen",
+        "Rudolph",
+        "Dasher",
+        "Dancer",
+        "Comet",
+        "Cupid",
+        "Donner",
+        "Blitzen",
+      ],
+      "light rain": [
+        "Prancer",
+        "Vixen",
+        "Rudolph",
+        "Dasher",
+        "Dancer",
+        "Comet",
+        "Cupid",
+        "Donner",
+        "Blitzen",
+      ],
+      overcast: [
+        "Rudolph",
+        "Dasher",
+        "Dancer",
+        "Comet",
+        "Cupid",
+        "Donner",
+        "Blitzen",
+        "Prancer",
+        "Vixen",
+      ],
+      mist: [
+        "Rudolph",
+        "Dasher",
+        "Dancer",
+        "Comet",
+        "Cupid",
+        "Donner",
+        "Blitzen",
+        "Prancer",
+        "Vixen",
+      ],
     };
 
-    const bestReindeerNames = weatherConditions[weatherDescription.toLowerCase()] || ["Rudolph", "Dasher", "Dancer", "Comet", "Cupid", "Donner", "Blitzen", "Prancer", "Vixen"];
-    
+    const bestReindeerNames = weatherConditions[
+      weatherDescription.toLowerCase()
+    ] || [
+      "Rudolph",
+      "Dasher",
+      "Dancer",
+      "Comet",
+      "Cupid",
+      "Donner",
+      "Blitzen",
+      "Prancer",
+      "Vixen",
+    ];
+
     // Sort reindeers and their climate adaptability
     return reindeers.sort((a, b) => {
       const aIndex = bestReindeerNames.indexOf(a.name);
@@ -172,7 +283,6 @@ export default function OrganizationModal({
     };
 
     onSubmit(formattedData);
-    generateOrganizationToView(allPositionsHaveReindeer ? formattedData : null);
     isClose();
     reset();
   });
@@ -263,9 +373,7 @@ export default function OrganizationModal({
               </Label>
             </div>
             <div className="flex flex-col gap-1">
-              <Label className=" text-zinc-500">
-                Organize your reindeer
-              </Label>
+              <Label className=" text-zinc-500">Organize your reindeer</Label>
               <CardDescription className="hidden min-[400px]:block">
                 Assign reindeer to Santa&apos;s sleigh by clicking buttons to
                 select from a menu of available options.
@@ -353,4 +461,3 @@ OrganizationModal.propTypes = {
   }),
   generateOrganizationToView: PropTypes.func,
 };
-

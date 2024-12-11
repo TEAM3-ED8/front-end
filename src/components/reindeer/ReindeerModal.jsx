@@ -68,9 +68,6 @@ export default function ReindeerModal({
 
   const onSubmitForm = handleSubmit((data) => {
     const formattedData = {
-      id: initialData
-        ? initialData.id
-        : Math.round(Math.random() * 100).toString(),
       ...data,
       skills: data.skills.map((skill) => ({
         skill: skill.skill,

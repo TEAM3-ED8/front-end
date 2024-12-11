@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import {
   useAddReindeer,
   useUpdateReindeer,
@@ -73,6 +73,7 @@ export default function OrganizationManager({ data }) {
               <OrganizationList
                 data={organizationsData}
                 generateOrganizationToView={setOrganizationToView}
+                organizationToView={organizationToView}
               />
             </TabsContent>
             <TabsContent value="reindeers">
@@ -116,7 +117,6 @@ export default function OrganizationManager({ data }) {
           organizationData: modalState.OrganizationModal.data,
           reindeersData: reindeersData,
         }}
-        generateOrganizationToView={setOrganizationToView}
       />
       <ReindeerModalInfo
         isOpen={modalState.ReindeerModalInfo.isOpen}

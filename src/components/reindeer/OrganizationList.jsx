@@ -30,6 +30,7 @@ import { useToast } from "@/hooks/useToast";
 export default function OrganizationList({
   data: organizationsData,
   generateOrganizationToView = () => {},
+  organizationToView,
 }) {
   // Use the context to access the state and its updater function
   const { setModalState } = React.useContext(ModalContext);
@@ -49,7 +50,7 @@ export default function OrganizationList({
         organizationDeleted
       );
       toast.success("Organization deleted successfully");
-      generateOrganizationToView(null);
+      hadleOrganizationToView(organizationDeleted);
     } catch {
       toast.error("Failed to delete organization");
     }
@@ -65,9 +66,27 @@ export default function OrganizationList({
         organizationsToDelete
       );
       toast.success("Organizations deleted successfully");
+      hadleOrganizationToView(organizationsToDelete);
       setCheckedOrganization([]);
     } catch {
       toast.error("Failed to delete selected organizations");
+    }
+  };
+
+  // Function to handle the organization to see when any organization is deleted
+  const hadleOrganizationToView = (organizationsDeleted) => {
+    if (organizationToView != null) {
+      const organizationList = Array.isArray(organizationsDeleted)
+        ? organizationsDeleted
+        : [organizationsDeleted];
+
+      const overviewIsNull = organizationList.some(
+        (organization) => organization.id === organizationToView.id
+      );
+
+      if (overviewIsNull) {
+        generateOrganizationToView(null);
+      }
     }
   };
 
@@ -207,10 +226,9 @@ export default function OrganizationList({
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <AlertDialogAction
                                   className="bg-red-600 hover:bg-red-700"
-                                  onClick={() => {
-                                    handleDeleteOrganization(organization);
-                                    generateOrganizationToView(null);
-                                  }}
+                                  onClick={() =>
+                                    handleDeleteOrganization(organization)
+                                  }
                                 >
                                   Continue
                                 </AlertDialogAction>
