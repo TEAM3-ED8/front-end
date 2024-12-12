@@ -172,11 +172,19 @@ export default function OrganizationList({
                             Selected
                           </Badge>
                         ) : organization.isAvailable ? (
-                          <Badge variant="outline" className="bg-green-300">
+                          <Badge
+                            variant="outline"
+                            className="bg-green-600 text-white"
+                          >
                             Available
                           </Badge>
                         ) : (
-                          <Badge variant="destructive">Incomplete</Badge>
+                          <Badge
+                            variant="outline"
+                            className="bg-red-600 text-white"
+                          >
+                            Incomplete
+                          </Badge>
                         )}
                         <div className="flex justify-center">
                           <Button

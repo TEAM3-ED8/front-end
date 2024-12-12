@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchChristmasSongs, fetchAllMembers } from "@/services/chillzone/chillzone";
+import {
+  fetchChristmasSongs,
+  fetchAllMembers,
+} from "@/services/chillzone/chillzone";
 import { NowPlaying } from "@/components/chillzone/nowPlaying";
 import { Playlist } from "@/components/chillzone/playList";
 import { VolumeControl } from "@/components/chillzone/volumeControl";
@@ -28,9 +31,7 @@ export const ChillZone = () => {
     queryFn: fetchChristmasSongs,
   });
 
-  const {
-    data: membersData,
-  } = useQuery({
+  const { data: membersData } = useQuery({
     queryKey: ["members"],
     queryFn: fetchAllMembers,
   });
@@ -51,23 +52,26 @@ export const ChillZone = () => {
     }
   }, []);
 
-  const playSong = useCallback(async (song) => {
-    if (!audioRef.current || !song?.previewUrl) return;
+  const playSong = useCallback(
+    async (song) => {
+      if (!audioRef.current || !song?.previewUrl) return;
 
-    try {
-      await stopCurrentPlayback();
-      audioRef.current.src = song.previewUrl;
-      audioRef.current.load();
-      playPromiseRef.current = audioRef.current.play();
-      playPromiseRef.current;
-      setIsPlaying(true);
-      playPromiseRef.current = null;
-    } catch (error) {
-      console.error("Playback failed:", error);
-      setIsPlaying(false);
-      playPromiseRef.current = null;
-    }
-  }, [stopCurrentPlayback]);
+      try {
+        await stopCurrentPlayback();
+        audioRef.current.src = song.previewUrl;
+        audioRef.current.load();
+        playPromiseRef.current = audioRef.current.play();
+        playPromiseRef.current;
+        setIsPlaying(true);
+        playPromiseRef.current = null;
+      } catch (error) {
+        console.error("Playback failed:", error);
+        setIsPlaying(false);
+        playPromiseRef.current = null;
+      }
+    },
+    [stopCurrentPlayback]
+  );
 
   useEffect(() => {
     if (christmasSongs && christmasSongs.length > 0) {
@@ -77,7 +81,7 @@ export const ChillZone = () => {
         playSong(song);
       }
     }
-    
+
     return () => {
       stopCurrentPlayback();
     };
@@ -119,13 +123,16 @@ export const ChillZone = () => {
     }
   };
 
-  const handleSongSelect = useCallback(async (song, index) => {
-    setCurrentSong(song);
-    setCurrentSongIndex(index);
-    if (song?.previewUrl) {
-      await playSong(song);
-    }
-  }, [playSong]);
+  const handleSongSelect = useCallback(
+    async (song, index) => {
+      setCurrentSong(song);
+      setCurrentSongIndex(index);
+      if (song?.previewUrl) {
+        await playSong(song);
+      }
+    },
+    [playSong]
+  );
 
   const handleSkipForward = useCallback(async () => {
     if (christmasSongs && christmasSongs.length > 0) {
@@ -137,7 +144,8 @@ export const ChillZone = () => {
 
   const handleSkipBack = useCallback(async () => {
     if (christmasSongs && christmasSongs.length > 0) {
-      const prevIndex = (currentSongIndex - 1 + christmasSongs.length) % christmasSongs.length;
+      const prevIndex =
+        (currentSongIndex - 1 + christmasSongs.length) % christmasSongs.length;
       const prevSong = christmasSongs[prevIndex];
       await handleSongSelect(prevSong, prevIndex);
     }
@@ -156,7 +164,7 @@ export const ChillZone = () => {
   return (
     <div className="min-h-screen text-white p-4 md:p-8">
       <h1 className="text-4xl text-center font-bold text-red-600 mb-8">
-        <UnderlineTitle text="Christmas Chill Zone 2024" />
+        <UnderlineTitle text="Chillzone" />
       </h1>
       <div className="max-w-8xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
@@ -199,4 +207,3 @@ export const ChillZone = () => {
     </div>
   );
 };
-

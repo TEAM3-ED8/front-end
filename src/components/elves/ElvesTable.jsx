@@ -15,7 +15,6 @@ import {
   Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -44,6 +43,7 @@ import {
   LoadingScreen,
   ErrorScreen,
 } from "@/components/global/santaDataLoader";
+import CustomCheckbox from "@/components/global/customCheckbox";
 import ElvesAvatar from "@/components/elves/ElvesAvatar";
 import { useToast } from "@/hooks/useToast";
 import { debounce } from "@/services/elvescrud/debounce";
@@ -79,7 +79,6 @@ export default function ElvesTable() {
     }, 500),
     []
   );
-  
 
   const debouncedFilterRef = useRef(debouncedSetFilter);
   debouncedFilterRef.current = debouncedSetFilter;
@@ -101,7 +100,7 @@ export default function ElvesTable() {
     {
       id: "select",
       header: ({ table }) => (
-        <Checkbox
+        <CustomCheckbox
           checked={
             table.getIsAllPageRowsSelected() ||
             (table.getIsSomePageRowsSelected() && "indeterminate")
@@ -111,7 +110,7 @@ export default function ElvesTable() {
         />
       ),
       cell: ({ row }) => (
-        <Checkbox
+        <CustomCheckbox
           checked={row.getIsSelected()}
           onCheckedChange={(value) => row.toggleSelected(!!value)}
           aria-label="Select row"
@@ -214,7 +213,7 @@ export default function ElvesTable() {
             className={`hidden md:inline-flex text-center ${
               row.getValue("isDeleted")
                 ? "bg-red-600 text-white px-3"
-                : "bg-green-700 text-white px-5"
+                : "bg-green-600 text-white px-5"
             }`}
           >
             {row.getValue("isDeleted") ? "Unavailable" : "Available"}
