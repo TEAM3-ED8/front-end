@@ -19,7 +19,7 @@ import {
 import { CardDescription } from "@/components/ui/card";
 import { Check } from "lucide-react";
 import { SantaSledge } from "@/components/global/iconsChristmas";
-import { fetchWeather } from "@/services/weather/weather";
+// import { fetchWeather } from "@/services/weather/weather";
 import { useQuery } from "@tanstack/react-query";
 export default function OrganizationModal({
   isOpen,
@@ -68,11 +68,11 @@ export default function OrganizationModal({
     positions.map((position) => position.reindeerId)
   );
 
-  const { data: weatherData } = useQuery({
-    queryKey: ["weather"],
-    queryFn: fetchWeather,
-    staleTime: Infinity,
-  });
+  // const { data: weatherData } = useQuery({
+  //   queryKey: ["weather"],
+  //   queryFn: fetchWeather,
+  //   staleTime: Infinity,
+  // });
 
   React.useEffect(() => {
     if (organizationData) {
@@ -336,7 +336,7 @@ export default function OrganizationModal({
                 )}
               </div>
             </div>
-            <div className="flex items-center space-x-2 mt-4">
+            {/* <div className="flex items-center space-x-2 mt-4">
               <CustomCheckbox
                 id="addBestReindeer"
                 className="border-red-400"
@@ -371,7 +371,7 @@ export default function OrganizationModal({
               >
                 Suggested best reindeer for December 25th.
               </Label>
-            </div>
+            </div> */}
             <div className="flex flex-col gap-1">
               <Label className=" text-zinc-500">Organize your reindeer</Label>
               <CardDescription className="hidden min-[400px]:block">
